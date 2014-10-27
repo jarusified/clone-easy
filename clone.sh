@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# function to check if that repository already exists in that directory
 dirExist(){
 	if [ -d "./$DIR/.git" ]; then
 		echo "Repository already exists, aborting"
@@ -7,6 +8,7 @@ dirExist(){
 	fi
 }
 
+# function to check if that repository exists globally
 repoExist(){
 	cmd=$(git ls-remote git@github.com:$USER/$DIR.git 2> /dev/null)	
 	if [[ $cmd ]]; then
@@ -16,7 +18,6 @@ repoExist(){
 }
 
 REPO=$(test -z "$*" && echo "." || echo "$*")
-
 IFS='/' read -a array <<< "$REPO"
 NAME=${array[0]}
 DIR=${array[1]}
