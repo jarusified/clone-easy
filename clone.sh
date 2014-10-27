@@ -1,8 +1,16 @@
 #!/bin/sh
 
-direxist(){
+dirExist(){
 	if [ -d "./$DIR/.git" ]; then
-		echo "repo already exists, aborting"
+		echo "Repository already exists, aborting"
+		exit 1
+	fi
+}
+
+repoExist(){
+	cmd=$(git ls-remote git@github.com:$USER/$DIR.git 2> /dev/null)	
+	if [[ $cmd ]]; then
+		echo "FATAL : No such repository exists"
 		exit 1
 	fi
 }
@@ -15,8 +23,10 @@ DIR=${array[1]}
 
 if [[ $REPO == [A-Za-z0-9]*\/[A-Za-z0-9]* ]]; 
 	then 
-		direxist \
-		&& git clone https://github.com/$REPO
+		dirExist \
+		&& repoExist \
+		&& $(git clone https://github.com/$REPO 2> /dev/null)
+		echo "git :: $NAME/$DIR has been cloned"
 	else
-		echo "Wrong name"
+		echo "Error"
 fi
